@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Converter Pro</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/potrace@2.1.8/potrace.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ag-psd@15.0.0/dist/bundle.min.js"></script>
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="background-animation"></div>
+        <div class="floating-particles"></div>
+        <div class="glow-effects"></div>
+        
+        <header class="main-header">
+            <div class="header-glow"></div>
+            <div class="logo">
+                <div class="logo-wrapper">
+                    <i class="fas fa-magic"></i>
+                </div>
+                <h1>Image Converter Pro</h1>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html" class="active">Home</a></li>
+                    <li><a href="about.html">About Us</a></li>
+                    <li><a href="contact.html">Contact Us</a></li>
+                </ul>
+            </nav>
+            <p class="tagline">Transform your images with professional tools</p>
+            <div class="header-decoration">
+                <div class="decoration-line"></div>
+                <i class="fas fa-camera"></i>
+                <div class="decoration-line"></div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="converter-card">
+                <div class="upload-section">
+                    <div class="drop-zone" id="dropZone">
+                        <div class="drop-zone-content">
+                            <div class="upload-icon-wrapper">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div class="upload-rings">
+                                    <div class="ring"></div>
+                                    <div class="ring"></div>
+                                    <div class="ring"></div>
+                                </div>
+                            </div>
+                            <h3>Drop your image here</h3>
+                            <p>or</p>
+                            <button class="upload-btn">Choose File</button>
+                            <p class="file-types">Supports: PNG, JPG, WEBP, GIF, BMP, and more</p>
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                    </div>
+                </div>
+
+                <div class="conversion-options" id="conversionOptions" style="display: none;">
+                    <div class="preview-section">
+                        <h3><i class="fas fa-image"></i> Preview</h3>
+                        <div class="preview-container">
+                            <img id="imagePreview" alt="Preview">
+                            <p id="imageInfo" class="image-info"></p>
+                        </div>
+                    </div>
+
+                    <div class="format-section">
+                        <h3><i class="fas fa-exchange-alt"></i> Convert to</h3>
+                        <div class="format-grid">
+                            <button data-format="png" class="format-btn">
+                                <div class="format-icon-wrapper">
+                                    <i class="fas fa-file-image"></i>
+                                    <div class="icon-glow"></div>
+                                </div>
+                                <span>PNG</span>
+                            </button>
+                            <button data-format="jpg" class="format-btn">
+                                <i class="fas fa-file-image"></i>
+                                <span>JPG</span>
+                            </button>
+                            <button data-format="webp" class="format-btn">
+                                <i class="fas fa-file-image"></i>
+                                <span>WEBP</span>
+                            </button>
+                            <button data-format="gif" class="format-btn">
+                                <i class="fas fa-file-image"></i>
+                                <span>GIF</span>
+                            </button>
+                            <button data-format="pdf" class="format-btn">
+                                <i class="fas fa-file-pdf"></i>
+                                <span>PDF</span>
+                            </button>
+                            <button data-format="svg" class="format-btn">
+                                <i class="fas fa-bezier-curve"></i>
+                                <span>SVG</span>
+                            </button>
+                            <button data-format="psd" class="format-btn">
+                                <i class="fas fa-layer-group"></i>
+                                <span>PSD</span>
+                            </button>
+                            <button data-format="ico" class="format-btn">
+                                <i class="fas fa-file-image"></i>
+                                <span>ICO</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <h3><i class="fas fa-sliders-h"></i> Settings</h3>
+                        <div class="settings-grid">
+                            <div class="setting-card">
+                                <label for="quality">
+                                    <i class="fas fa-star"></i> Quality
+                                    <span id="qualityValue">90%</span>
+                                </label>
+                                <input type="range" id="quality" min="1" max="100" value="90">
+                            </div>
+
+                            <div class="setting-card" id="svgSettings" style="display: none;">
+                                <label for="svgDetail">
+                                    <i class="fas fa-vector-square"></i> SVG Detail
+                                </label>
+                                <select id="svgDetail">
+                                    <option value="low">Low (Faster)</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High (Slower)</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-card">
+                                <label for="resize">
+                                    <i class="fas fa-expand-arrows-alt"></i> Resize
+                                </label>
+                                <select id="resize">
+                                    <option value="original">Original Size</option>
+                                    <option value="small">Small (800x600)</option>
+                                    <option value="medium">Medium (1024x768)</option>
+                                    <option value="large">Large (1920x1080)</option>
+                                    <option value="custom">Custom Size</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-card" id="customSize" style="display: none;">
+                                <label>
+                                    <i class="fas fa-ruler-combined"></i> Custom Size
+                                </label>
+                                <div class="custom-size">
+                                    <div class="size-input-group">
+                                        <label for="width">Width</label>
+                                        <input type="number" id="width" min="1" placeholder="Width">
+                                    </div>
+                                    <span>×</span>
+                                    <div class="size-input-group">
+                                        <label for="height">Height</label>
+                                        <input type="number" id="height" min="1" placeholder="Height">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons">
+                        <button id="convertBtn" class="convert-btn">
+                            <i class="fas fa-magic"></i> Convert Image
+                        </button>
+                    </div>
+
+                    <div id="downloadSection" class="download-section" style="display: none;">
+                        <div class="success-message">
+                            <div class="success-icon-wrapper">
+                                <i class="fas fa-check-circle"></i>
+                                <div class="success-rings">
+                                    <div class="ring"></div>
+                                    <div class="ring"></div>
+                                </div>
+                            </div>
+                            <h3>Conversion Complete!</h3>
+                            <p>Your image has been successfully converted</p>
+                        </div>
+                        <button id="downloadBtn" class="download-btn">
+                            <i class="fas fa-download"></i> Download Converted File
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="main-footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="privacy.html">Privacy Policy</a>
+                    <a href="disclaimer.html">Disclaimer</a>
+                </div>
+                <p> 2025 Image Converter Pro. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
